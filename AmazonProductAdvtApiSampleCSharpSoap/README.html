@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>Amazon Product Advertising API - Signed Requests Sample Code - CSharp</title>
+<style type="text/css">
+body,div,p,td,th {
+	font-family: helvetica, sans-serif, arial;
+	font-size: 12px;
+	color: #000000;
+}
+
+.aws-h1,h1 {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #000000;
+}
+
+.aws-h2,h2 {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 14px;
+	color: #c60;
+}
+
+.aws-h3,h3 {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #333333;
+}
+
+/*table ID selector styles*/
+#aws-table {
+	border-top: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	width: 95%;
+}
+
+#aws-table td {
+	font-size: 12px;
+	padding: 5px 5px 5px 5px;
+	border-bottom: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	vertical-align: top;
+}
+
+#aws-table th {
+	font-size: 12px;
+	padding: 5px 5px 5px 5px;
+	border-bottom: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	vertical-align: top;
+	background-color: #eeeeee;
+	color: #333333;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+}
+
+/*code, note, and example styles*/
+pre {
+	font-size: 12px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	color: #000066;
+	padding: 12px;
+	background-color: #eff7ff;
+	border: 1px dashed #333;
+	width: 75%;
+	display: block;
+}
+</style>
+</head>
+<body>
+<h2>About this Sample</h2>
+<ul>
+	<li>Based on the 2009-03-31 API version.</li>
+	<li>This sample shows how to send an authenticated SOAP request to the Amazon Product Advertising API using C#</li>
+</ul>
+
+<h2>Prerequisites</h2>
+<ul>
+	<li><b>Amazon Product Advertising API Account</b> (<a
+		href="http://associates.amazon.com/gp/advertising/api/detail/main.html">http://associates.amazon.com/gp/advertising/api/detail/main.html/</a>).
+	</li>
+	<li>Visual Studio 2008 Express Edition, .NET Framework (v3.5 recommended, should also works with 2.0 and 3.0)</li>
+	<li>Microsoft Web Services Enhancements 3.0 (<a
+		href="http://www.microsoft.com/downloads/details.aspx?familyid=018a09fd-3a74-43c5-8ec1-8d789091255d&displaylang=en">http://www.microsoft.com/downloads/details.aspx?familyid=018a09fd-3a74-43c5-8ec1-8d789091255d&amp;displaylang=en</a>).<br/>
+		Ensure all tools are installed in addition to the runtime environment.
+	</li>
+</ul>
+
+<h2>Reference Documentation</h2>
+<ul>
+	<li><a href="http://associates.amazon.com/gp/advertising/api/detail/main.html/">Online Reference
+	Documentation</a></li>
+</ul>
+
+<h2>Quick Start</h2>
+Sample comes with a C# solution and two pre-configured C# projects:
+<ul>
+	<li><strong>Client</strong> - library project containing the generated client and signature implementation.</li>
+	<li><strong>Sample</strong> - example showing how to securely invoke the service.</li>
+</ul>
+To get started with the sample, follow these steps:
+<ol>
+	<li>Extract the <strong>amazon-product--advt-api-sample-csharp-soap.zip</strong>
+	file into a working directory.</li>
+	<li>Open AmazonProductAdvtApiSample.sln solution file in Visual Studio</li>
+</ol>
+
+<h2><a name="running">Running the Sample</a></h2>
+Steps to run the sample
+<ul>
+	<li>If you'd like to use X.509 Certificate based authentication, see the <a href="#certSetup">Setting up your certificate</a> section below for details.</li>
+	<li>If you'd like to use AWS Secret Key (HMAC) authentication instead, see the <a href="#secretSetup">Setting up your AWS Secret Key</a> section for details.</li>
+	<li>Right-click the solution and make sure the startup project is set to <strong>Sample</strong>.</li>
+	<li>Right-click the <strong>Sample</strong> project, select <strong>Properties</strong> and on the <strong>Applications</strong> tab, set the <strong>
+        Startup Object</strong> to sample you selected above (either <tt>X509Sample</tt> or <tt>HmacSample</tt>). 
+        You may also wish to change the <tt>DESTINATION</tt> in the corresponding source file if you are interested in 
+        regions other than US.</li>
+	<li>Select Debug menu -&gt; Start Debugging or hit F5 to run the sample.</li>
+</ul>
+
+<h2><a name="certSetup">Setting up your certificate</a></h2>
+Steps to obtain the X.509 Certificate from AWS and make it available to the sample code. 
+<ul>
+	<li>Sign-in to your AWS account at <a href="http://aws.amazon.com/">http://aws.amazon.com/</a>
+	   and select "Your Account -&gt; Access Identifiers".</li>
+	<li>Select the <strong>Create</strong> option to create your certificates
+	   and download them. You will have two files <tt>pk-XXXX.pem</tt> and <tt>cert-XXXX.pem</tt></li>
+	<li>To import them into the Windows KeyStore, you will need to convert
+	   your certificate into the PCKS12 format. To do this, you need the OpenSSL
+	   tools, which can be downloaded for free at:<br/>
+	   <a href="http://gnuwin32.sourceforge.net/packages/openssl.htm">http://gnuwin32.sourceforge.net/packages/openssl.htm</a>
+	</li>
+	<li>Unzip OpenSSL, change to the directory where you downloaded the	certificates and run: 
+		<pre>C:\path\to\openssl\bin\openssl pkcs12 -export -in cert-XXXX.pem -inkey pk-XXXX.pem -out my_aws_cert.p12</pre>
+	    You will be asked to provide a password, make a note of it since you'll need it later.
+	</li>
+	<li>Import the certificate into the Windows KeyStore as follows:
+	<ol>
+		<li>Start Microsoft Management Console by clocking Start -&gt; Run -&gt; type <tt>mmc</tt> -&gt; click OK.</li>
+		<li>Select File menu -&gt; Add/Remove Snap-in.</li>
+		<li>In the Add/Remove Snap-in dialog box, click Add.</li>
+		<li>In the Add Standalone Snap-in dialog box, select Certificates, click Add, click Close, and then click OK.</li>
+		<li>In MMC, expand Certificates - Current User, right-click Personal, select All Tasks -&gt; Import.</li>
+		<li>On the Certificate Import Wizard Welcome page, click Next.</li>
+		<li>On the File to Import page, click Browse and locate the folder that contains the my_aws_cert.p12 file.
+			Select the appropriate file, and then click Open.</li>
+		<li>On the Password page, in the Password box, type the password you provided when you 
+		    converted the certificate using OpenSSL. Click Next.</li>
+		<li>On the Certificate store page, select Place all certificates in the following store. 
+			Click Browse, select the Personal store, click OK, and then click Next.</li>
+		<li>On the Completing the Certificate Import Wizard page, click Finish.</li>
+	</ol>
+	</li>
+	<li>
+		Now you can find the name of the certificate as follows:
+		<ol>
+			<li>Select Start -&gt; All Programs -&gt; Microsoft WSE 3.0 -&gt; Certificates Tool.</li>
+			<li>Set Certificate Location to Current User and Store Name to Personal. Click Open Certificate.</li>
+			<li>Select the certificate issued by AWS Limited-Assurance CA and click OK.</li>
+			<li>In the Subject field, the full subject name of the certificate will be displayed. Copy this value; 
+				you will need to paste this value into the sample code as described in the 
+				<a href="#running">Running the sample</a> section</li>
+		</ol>
+	</li>
+    <li>To configure the sample with this certificate, open <tt>Sample/src/X509Sample.cs</tt> 
+        and set the name of the certificate to the correct value for your certificate:
+    <pre>const String MY_AWS_CERT_NAME = "CN=XXXXXX, OU=AWS-Developers, O=Amazon.com, C=US";</pre>
+    </li>
+</ul>
+
+<h2><a name="secretSetup">Setting up your AWS Secret Key</a></h2>
+Steps to obtain the AWS Secrety Key from AWS and configure the sample code.
+<ul>
+    <li>Sign-in to your AWS account at <a href="http://aws.amazon.com/">http://aws.amazon.com/</a>
+        and select "Your Account -&gt; Access Identifiers".</li>
+    <li>Copy the AWS Access Key ID and AWS Secret Key values.</li>
+    <li>Open <tt>Sample/src/HmacSample.cs</tt> and change the <tt>MY_AWS_ID</tt> and <tt>MY_AWS_SECRET</tt> values
+        respectively to match the ones you copied above.
+    </li>
+</ul> 
+
+<h2>Comments, Questions or Feedback</h2>
+    If you have any comments, questions or feedback on the library, please visit the
+    <a href="http://developer.amazonwebservices.com/connect/forum.jspa?forumID=9">Amazon
+    Amazon Product Advertising API discussion forums</a>.
+</body>
+</html>

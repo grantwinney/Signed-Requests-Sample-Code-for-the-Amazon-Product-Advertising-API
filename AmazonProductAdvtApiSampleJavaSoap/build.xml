@@ -1,0 +1,99 @@
+<!--
+/**********************************************************************************************
+ * Copyright 2009 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file 
+ * except in compliance with the License. A copy of the License is located at
+ *
+ *       http://aws.amazon.com/apache2.0/
+ *
+ * or in the "LICENSE.txt" file accompanying this file. This file is distributed on an "AS IS"
+ * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under the License. 
+ *
+ * ********************************************************************************************
+ *
+ *  Amazon Product Advertising API
+ *  Signed Requests Sample Code
+ *
+ *  API Version: 2009-03-31
+ *
+ */
+-->
+<project name="AmazonProductAdvertisingApiSample" default="usage" basedir=".">
+	<target name="usage">
+		<echo>Usage:
+    1.    Edit this file (build.xml) and set the value of the wss4j.home property
+          to the location where you have installed WSS4J and related JARs.
+    
+    2.    Use target "client" to generate the client.
+    
+    3.    Unfortunately, Axis generates the ItemAttributes bean with a constructor
+          that has more parameters than allowed by Java. You need to manually edit
+          client/com/amazon/advertising/api/ItemAttributes.java and remove the bad constructor.
+    
+    4.    Configure the sample as described in README.html
+    
+    5.    Use target "run" to run the sample.
+		</echo>
+	</target>
+	
+        <property name="wss4j.home"			value="./wss4j" />
+	
+	<path id="run.classpath">
+		<fileset dir="${wss4j.home}">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${wss4j.home}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${wss4j.home}/endorsed">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="axis.init">
+		<taskdef resource="axis-tasks.properties">
+			<classpath refid="run.classpath" />
+		</taskdef>
+	</target>
+	
+	<target name="client" depends="axis.init">
+		<mkdir dir="client" />
+		<axis-wsdl2java 
+			output="client" 
+			deployScope="Application"
+			verbose="true" 
+			serverSide="false" 
+                        url="http://beta.ecs.amazonaws.com/AWSECommerceService/2009-03-31/http://webservices.amazon.com/AWSECommerceService/2009-03-31/AWSECommerceService.wsdl"
+			nowrapped="true"
+			>
+			<mapping
+				namespace="http://webservices.amazon.com/AWSECommerceService/2009-03-31"
+				package="com.amazon.advertising.api" />
+		</axis-wsdl2java>
+		<echo message="Please remove the ItemAttributes(...) constructor in client/com/amazon/advertising/api/ItemAttributes.java" />
+	</target>
+	
+	<target name="compile">
+		<mkdir dir="classes" />
+		<javac destdir="classes" debug="on">
+			<classpath refid="run.classpath" />
+			<src path="client" />
+			<src path="sample" />
+		</javac>
+	</target>
+	
+	<target name="run" depends="compile"> 
+		<java classname="com.amazon.advertising.api.sample.SampleItemLookup" fork="true">
+			<classpath refid="run.classpath" />
+			<classpath location="classes" />
+			<classpath location="resources" />
+			<jvmarg value="-Daxis.socketSecureFactory=org.apache.axis.components.net.SunFakeTrustSocketFactory" />
+		</java>
+	</target>
+	
+	<target name="clean">
+	    <delete dir="classes" />
+	</target>
+</project>

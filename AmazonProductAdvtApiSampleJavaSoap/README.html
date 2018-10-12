@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<title>Amazon Product Advertising API - Signed Requests Sample Code - Java</title>
+<style type="text/css">
+body,div,p,td,th {
+	font-family: helvetica, sans-serif, arial;
+	font-size: 12px;
+	color: #000000;
+}
+
+.aws-h1,h1 {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #000000;
+}
+
+.aws-h2,h2 {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 14px;
+	color: #c60;
+}
+
+.aws-h3,h3 {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	color: #333333;
+}
+
+/*table ID selector styles*/
+#aws-table {
+	border-top: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	width: 95%;
+}
+
+#aws-table td {
+	font-size: 12px;
+	padding: 5px 5px 5px 5px;
+	border-bottom: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	vertical-align: top;
+}
+
+#aws-table th {
+	font-size: 12px;
+	padding: 5px 5px 5px 5px;
+	border-bottom: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	vertical-align: top;
+	background-color: #eeeeee;
+	color: #333333;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left;
+}
+
+/*code, note, and example styles*/
+pre {
+	font-size: 12px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	color: #000066;
+	padding: 12px;
+	background-color: #eff7ff;
+	border: 1px dashed #333;
+	width: 75%;
+	display: block;
+}
+</style>
+</head>
+<body>
+<h2>About this Sample</h2>
+<ul>
+	<li>Based on the 2009-03-31 API version.</li>
+	<li>This sample shows how to send an authenticated SOAP request to the Amazon Product Advertising API using Java</li>
+</ul>
+
+<h2>Prerequisites</h2>
+<ul>
+	<li><b>Amazon Product Advertising API Account</b> (<a
+		href="http://associates.amazon.com/gp/advertising/api/detail/main.html">http://associates.amazon.com/gp/advertising/api/detail/main.html/</a>).
+	</li>
+	<li>JDK 1.5.0 or better, Apache ANT 1.6 or greater</li>
+	<li>Apache Axis 1.4 Final (<a href="http://ws.apache.org/axis/">http://ws.apache.org/axis/</a>)
+		and WSS4J 1.5.4 or later (<a href="http://ws.apache.org/wss4j/">http://ws.apache.org/wss4j/</a>)<br/>
+		If you download <tt>wss4j-1.5.4.jar</tt> and <tt>wss4j-otherjars-1.5.4.zip</tt>
+		then you do not need to download the Axis runtime separately. The complete list of JARs you need:
+		<ul>
+			<li><tt>addressing-1.0.jar</tt></li>
+			<li><tt>axis-1.4.jar</tt></li>
+			<li><tt>axis-ant-1.4.jar</tt></li>
+			<li><tt>axis-jaxrpc-1.4.jar</tt></li>
+			<li><tt>axis-saaj-1.4.jar</tt></li>
+			<li><tt>commons-codec-1.3.jar</tt></li>
+			<li><tt>commons-discovery-0.2.jar</tt></li>
+			<li><tt>commons-httpclient-3.0-rc2.jar</tt></li>
+			<li><tt>commons-logging-1.0.4.jar</tt></li>
+			<li><tt>junit-3.8.1.jar</tt></li>
+			<li><tt>log4j-1.2.9.jar</tt></li>
+			<li><tt>opensaml-1.0.1.jar</tt></li>
+			<li><tt>serializer-2.7.0.jar</tt></li>
+			<li><tt>wsdl4j-1.5.1.jar</tt></li>
+			<li><tt>wss4j-1.5.4.jar</tt></li>
+			<li><tt>xalan-2.7.0.jar</tt></li>
+			<li><tt>xercesImpl.jar</tt></li>
+			<li><tt>xml-apis.jar</tt></li>
+			<li><tt>xmlsec-1.4.0.jar</tt></li>
+		</ul>
+                When you have downloaded and unzipped the WSS4J distribution, please edit <tt>build.xml</tt> to set the <tt>wss4j.home</tt> property accordingly.
+                <br/>
+                Unfortunately, <tt>addressing-1.0.jar</tt> is not available in later versions of WSS4J. It is currently included in the <i>Java WS Core</i> distribution of Globus Toolkit, which
+                is available at <a href="http://www.globus.org/toolkit/downloads/">http://www.globus.org/toolkit/downloads/</a>. Version 4.2 or later is recommended. Move <tt>addressing-1.0.jar</tt>
+                to <tt>wss4j/libs</tt> or edit <tt>build.xml</tt> to make it available to the sample.
+                <br/>
+
+	<li>OpenSSL 0.9.8 or better:
+	    <br/>If you are a UNIX user, you probably already have it installed or you can use the installation process appropriate for your
+	    distribution.   
+	    <br/>If you are a Windows user
+	    and don't have them, you can download them for free at <a href="http://gnuwin32.sourceforge.net/packages/openssl.htm">http://gnuwin32.sourceforge.net/packages/openssl.htm</a>.
+	</li>
+</ul>
+
+<h2>Reference Documentation</h2>
+<ul>
+	<li><a href="http://associates.amazon.com/gp/advertising/api/detail/main.html/">Online Reference Documentation</a></li>
+</ul>
+
+<h2>Running the sample</h2>
+Steps to run the sample: 
+<ul>
+	<li>
+		Extract <strong>amazon-product-advt-api-sample-java-soap.zip</strong> into a working directory. 
+		All files will be placed in a sub-directory named <tt>AmazonProductAdvtApiSampleJavaSoap</tt>. Change to this directory.
+	</li>
+	<li>
+		If you downloaded any libraries, place them in the <tt>lib</tt> directory. If you'd like to use the ones already packaged
+		this sample, you do not need to do anything.
+	</li>
+	<li>If you'd like to use X.509 Certificate based authentication, see the <a href="#certSetup">Setting up your certificate</a> section below for details.</li>
+	<li>If you'd like to use AWS Secret Key authentication instead, see the <a href="#secretSetup">Setting up your AWS Secret Key</a> section for details.</li>
+	<li>Configure your sample as follows:
+		<ul>
+			<li>Open <tt>sample/com/amazon/advertising/api/sample/SampleItemLookup.java</tt> file in an editor and change the
+				<tt>END_POINT</tt> value as needed. You may also want to change the <tt>ITEM_ID</tt> in the sample if the
+				one provided does not work in the locale of your choice.
+			</li>
+		</ul>
+	</li>
+	<li>Generate the client by running:
+		<pre>ant client</pre>
+		<strong>Unfortunately, Axis generates a constructor for the ItemAttributes element that has more parameters than allowed by Java.</strong><br/>
+		To fix this, edit <tt>client/com/amazon/advertising/api/ItemAttributes.java</tt> and remove the offending constructor. 
+	</li>
+	<li>Run the sample:
+		<pre>ant run</pre>
+		You should see a message with the title of the item whose ID was specified in the sample.
+	</li>
+</ul>
+
+<h2><a name="certSetup">Setting up your certificate</a></h2>
+Steps to obtain the X.509 Certificate from Amazon and configure the sample code. 
+<ul>
+	<li>Sign-in to your Amazon Web Services account at <a href="http://aws.amazon.com/">http://aws.amazon.com/</a>
+	and select "Your Account -&gt; Access Identifiers".</li>
+	<li>Select the <strong>Create</strong> option to create your certificates
+	and download them. You will have two files <tt>pk-XXXX.pem</tt> and <tt>cert-XXXX.pem</tt>
+	<br/>Note that you can download the private key file (<tt>pk-XXXX.pem</tt>) at the time
+	of certificate creation <i>only</i> and will not be available later. If you lose it, you have
+	to create a new certificate. So keep it safe.
+	</li>
+	<li>To make them available to the sample code, you will need to convert
+	your certificate into the PCKS12 format. To do this, you need the OpenSSL
+	tools.
+	</li>
+	<li>Unzip OpenSSL, change to the directory where you downloaded the	certificates and run (all in one line): 
+		<pre>C:\path\to\openssl\bin\openssl pkcs12 -export 
+	-in cert-XXXX.pem 
+	-inkey pk-XXXX.pem 
+	-name my_amazon_cert
+	-out my_amazon_cert.p12</pre>
+		Make a note of the password you used, we'll need to configure the sample with this value. 
+		The <i>name</i> specified above is the <i>alias</i> for the certificate and that will also be needed to configure the sample.
+		To view details of the certificate you just created (to look up the alias, for e.g.) use this: 
+		<pre>C:\path\to\JDK\bin\keytool -v -list -storetype pkcs12 -keystore my_amazon_cert.p12</pre>
+	</li>
+    <li>Copy the certificate generated above - <tt>my_amazon_cert.p12</tt> - into the <tt>resources</tt> directory.</li>
+    <li>Open <tt>resources/amazon_certificate.properties</tt> file in an editor and change the <tt>file</tt>,
+        <tt>alias</tt> and <tt>password</tt> values accordingly.
+    </li>
+    <li>Open <tt>resources/x509.wsdd</tt> file in an editor and change the <tt>user</tt> parameter's
+        value to the certificate alias (in the command above the value is <tt>my_amazon_cert</tt>).
+    </li>
+    <li>Open <tt>sample/com/amazon/advertising/api/sample/PasswordCallback.java</tt> file in an editor and change the
+        <tt>PASSWORD</tt> value to the one you used when setting up your certificate.
+    </li>
+    <li>Open <tt>sample/com/amazon/advertising/api/sample/SampleItemLookup.java</tt> file in an editor and change the
+        <tt>WSDD</tt> value to <tt>x509.wsdd</tt>.
+    </li>
+    <li>Copy the AWS Access Key ID value from the Access Identifiers page and change the value of <tt>AWS_ACCESS_KEY_ID</tt> in
+    	<tt>sample/com/amazon/advertising/api/sample/SampleItemLookup.java</tt> accordingly.
+    </li>
+</ul>
+
+<h2><a name="secretSetup">Setting up your Secret Key</a></h2>
+Steps to obtain your Secret Key from Amazon.com and configure the sample code.
+<ul>
+    <li>Sign-in to your Amazon Web Services account at <a href="http://aws.amazon.com/">http://aws.amazon.com/</a>
+    and select "Your Account -&gt; Access Identifiers".</li>
+    <li>Copy the AWS Access Key ID and AWS Secret Key values.</li>
+    <li>Open <tt>resources/hmac.wsdd</tt> file in an editor and change the <tt>awsAccessKeyId</tt> and <tt>awsSecretKey</tt> values
+        respectively to match the ones you copied above.
+    </li>
+    <li>Also open <tt>sample/com/amazon/advertising/api/sample/SampleItemLookup.java</tt> and set the <tt>AWS_ACCESS_KEY_ID</tt> value.
+    </li>
+    <li>Open <tt>sample/com/amazon/advertising/api/sample/SampleItemLookup.java</tt> file in an editor and change the
+        <tt>WSDD</tt> value to <tt>hmac.wsdd</tt>.
+    </li>
+</ul> 
+
+<h2>Comments, Questions or Feedback</h2>
+If you have any comments, questions or feedback on the library, please visit the
+<a href="http://developer.amazonwebservices.com/connect/forum.jspa?forumID=9">Amazon
+Amazon Product Advertising API discussion forums</a>.
+
+</body>
+</html>
