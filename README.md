@@ -18,4 +18,10 @@ I tracked down what I could find of them and posted links in a blog post, but up
 
 ---
 
-Since the original license for all of these is Apache License 2.0, I applied that license to this whole repo too. It allows one to "reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications" as long as the original license, and any "NOTICE" text files, remain in place.
+**License**
+
+Since the original license for all of these is Apache License 2.0, I decided to apply it to the whole repo too. Anyway, that particular license allows one to _"reproduce and distribute copies of the Work or Derivative Works thereof in any medium, with or without modifications"_ as long as the original license, and any "NOTICE" text files, remain in place.
+
+**Contributions**
+
+I don't intend to modify these files, unless somehow the originals are modified (doubtful), as they're just here for archival purposes.
