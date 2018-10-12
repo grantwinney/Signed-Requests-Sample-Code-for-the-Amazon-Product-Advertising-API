@@ -1,6 +1,6 @@
 ## Signed Requests Sample Code (for the Amazon Product Advertising API)
 
-In convering the elusive Amazon Product Advertising API, I came across the defunct [Sample Code & Libraries](https://web.archive.org/web/20150924044348/https://aws.amazon.com/code/Product-Advertising-API) page that had links to numerous repositories and some compressed, archived code samples.
+In [covering the elusive Amazon Product Advertising API](https://grantwinney.com/querying-amazon-product-details-with-the-amazon-product-advertising-api/), I came across the defunct [Sample Code & Libraries](https://web.archive.org/web/20150924044348/https://aws.amazon.com/code/Product-Advertising-API) page that had links to numerous repositories and some compressed, archived code samples.
 
 I tracked down what I could find of them and posted links in a blog post, but uploaded some of the code samples (which are still available to download, but nearly undiscoverable since the page referencing them is gone) here. They're fairly old at this point, so they may be of limited value, but they may be of use to someone trying to use the API (despite Amazon's best efforts at hiding it).
 
